@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/register', [App\Http\Controllers\UserController::class, 'register']);
+Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [App\Http\Controllers\UserController::class, 'user']);
+    Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout']);
+
+    Route::get('decks', [App\Http\Controllers\DeckController::class, "get"]);
+    Route::post('decks', [App\Http\Controllers\DeckController::class, "create"]);
+    Route::get('decks/{id}', [App\Http\Controllers\DeckController::class, "getById"]);
+    Route::put('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);
+    Route::delete('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);
+    
 });
+
+Route::apiResource('cards', CardController::class)->only(['index', 'show', 'update']);

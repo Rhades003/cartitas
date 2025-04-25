@@ -10,11 +10,8 @@
         </div>
 
         <div id="decks-container" class="row">
-            <!-- Los mazos se cargarán aquí con JavaScript -->
         </div>
     </div>
-
-    <!-- Modal para crear mazo -->
     <div class="modal fade" id="newDeckModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">

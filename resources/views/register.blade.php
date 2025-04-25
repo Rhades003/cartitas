@@ -34,4 +34,37 @@
         </div>
     </div>
 </div>
+<script>
+    console.log("aaaa");
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log("aaaa");
+            register();
+        });
+        console.log("aaaa");
+        function register() {
+            console.log(document.getElementById('name').value+" "+document.getElementById('email').value+" "+document.getElementById('password').value+" "+document.getElementById('password_confirmation').value);
+            if(document.getElementById('password').value != document.getElementById('password_confirmation').value) {
+                alert("Las contraseñas no coinciden");
+                return;
+            }
+            
+            axios.post("/api/register", {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    confirm_password: document.getElementById('password_confirmation').value,
+                })
+                .then(response => {        
+                    window.location.href = '/login';
+                })
+                .catch(error => {
+                    console.error("Error completo:", {
+                        status: error.response?.status,
+                        data: error.response?.data,
+                        headers: error.response?.headers
+                    });
+                });
+        }
+</script>
 @endsection

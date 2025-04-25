@@ -38,10 +38,7 @@
     </div>
 
     <script>
-        const token = localStorage.getItem('token');
-        const fullToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
         
-
         document.getElementById('new-deck-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             createDeck();
@@ -49,6 +46,8 @@
         loadDecks();
 
         function createDeck() {
+            let token = localStorage.getItem('token');
+
             let nameDeck = document.getElementById("deck-name");
             let public = document.getElementById("deck-public");
 
@@ -60,12 +59,13 @@
                     cards: []
                 }, {
                     headers: {
-                        'Authorization': fullToken,
+                        'Authorization': token,
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
                     console.log("Mazo creado:", response.data);
+                    window.location.href = '/decks';
                 })
                 .catch(error => {
                     console.error("Error completo:", {
@@ -77,10 +77,11 @@
         }
     
         function loadDecks() {
+            let token = localStorage.getItem('token');
 
             axios.get("/api/decks", {
                 headers: {
-                    "Authorization": fullToken,
+                    "Authorization": token,
                 }
             })
             .then(response => {
@@ -116,17 +117,27 @@
         async function deleteDeck(deckId) {
             if (!confirm('¿Seguro que quieres eliminar este mazo?')) return;
 
-            const token = localStorage.getItem('token');
-            const response = await fetch(`/api/decks/${deckId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            let token = localStorage.getItem('token');
 
-            if (response.ok) {
-                await loadDecks();
-            }
+            axios.delete("/api/decks/"+deckId, {
+                headers: {
+                    "Authorization": token,
+                }
+            })
+            .then(response => {
+                    console.log("Mazos:", response.data);
+                    
+                    if(response.status = 200) {
+                        window.location.href = '/decks';
+                    }
+                })
+            .catch(error => {
+                console.error("Error completo:", {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    headers: error.response?.headers
+                });
+            });
         }
     </script>
 @endsection

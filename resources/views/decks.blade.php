@@ -34,6 +34,7 @@
                 </div>
             </div>
         </div>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </div>
 
     <script>
@@ -45,6 +46,7 @@
             e.preventDefault();
             createDeck();
         });
+        loadDecks();
 
         function createDeck() {
             let nameDeck = document.getElementById("deck-name");
@@ -73,19 +75,25 @@
                     });
                 });
         }
+    
+        function loadDecks() {
 
-        async function loadDecks() {
-
-            const response = await fetch('/api/decks', {
+            axios.get("/api/decks", {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    "Authorization": fullToken,
                 }
+            })
+            .then(response => {
+                    console.log("Mazos:", response.data);
+                    if(response.status = 200) renderDecks(response.data);
+                })
+            .catch(error => {
+                console.error("Error completo:", {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    headers: error.response?.headers
+                });
             });
-
-            if (response.ok) {
-                const decks = await response.json();
-                renderDecks(decks);
-            }
         }
 
         function renderDecks(decks) {

@@ -26,12 +26,21 @@ class CardController extends Controller
     public function show($id)
     {
         $card = Card::with('offers')->findOrFail($id);
-        $user = Auth::user();
-
-            $data = [
-                "card"=> $card,
-                "admin"=>$user->admin,
+        
+        try {
+            $user = Auth::user();
+        
+        }catch(Exception $e) {
+            $user = [
+                "admin" => false
             ];
+        }
+
+        $data = [
+            "card"=> $card,
+            "admin"=>$user->admin,
+        ];
+            
 
             return response()->json($data);
         }

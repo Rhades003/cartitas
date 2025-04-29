@@ -27,18 +27,14 @@ class CardController extends Controller
     {
         $card = Card::with('offers')->findOrFail($id);
         
-        try {
-            $user = Auth::user();
-        
-        }catch(Exception $e) {
-            $user = [
-                "admin" => false
-            ];
+        $isAdmin = false;
+        if (Auth::check()) {
+            $isAdmin = Auth::user()->admin ?? false;
         }
 
         $data = [
-            "card"=> $card,
-            "admin"=>$user->admin,
+            "card" => $card,
+            "admin" => $isAdmin,
         ];
             
 

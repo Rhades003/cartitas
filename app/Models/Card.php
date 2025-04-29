@@ -13,7 +13,7 @@ class Card extends Model
 
     public function offers()
     {
-        return $this->belongsToMany(Offer::class, 'cards_offers');
+        return $this->belongsToMany(Offer::class, 'cards_offers', "id_card", "id_offer");
     }
 
     public function decks()

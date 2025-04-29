@@ -101,14 +101,19 @@
 
 
         function searchCards() {
-            const card = cardSearch.value.trim();
-            if (!card) return;
+            
     
-            axios.get(`/api/cards?title=${card}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+            axios.get("/api/cards/", {
+                    params: {
+                        name: cardSearch.value,
+                        searchOnlyhForName: true,
+                    },
+                }, {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                })
             .then(response => {
                 displaySearchResults(response.data.data);
             })

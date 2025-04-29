@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="row">
-        <!-- Filtros -->
         <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-header">Filtrar Cartas</div>
@@ -40,18 +39,20 @@
             e.preventDefault();
             searchCard();
         });
+        let cardsContainer = document.getElementById("cards-container");
 
         function searchCard() {
             let token = localStorage.getItem('token');
 
             let nameCard = document.getElementById("name-card");
 
-
+            
             console.log(nameCard.value);
 
             axios.get("/api/cards/", {
                     params: {
-                        name: nameCard.value
+                        name: nameCard.value,
+                        searchOnlyhForName: false,
                     },
                 }, {
                     headers: {
@@ -61,6 +62,8 @@
                 })
                 .then(response => {
                     console.log(response.data);
+                    console.log("-------------------");
+                    displaySearchResults(response.data.data);
                     //window.location.href = '/decks';
                 })
                 .catch(error => {
@@ -70,6 +73,27 @@
                         headers: error.response?.headers
                     });
                 });
+        }
+
+        function displaySearchResults(cards) {
+            console.log(cards); 
+
+            cardsContainer.innerHTML = "";
+            
+            cards.forEach(card => {
+                console.log(card); 
+                cardsContainer.innerHTML += `
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <a href="/cards/${card.id}"><img src="${card.img}" class="card-img-top" alt="${card.title}"></a>
+                            <div class="card-body text-center">
+                                <h6 class="card-title">${card.title}</h6>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+    
+            searchResultsContainer.style.display = 'flex';
         }
     </script>
 @endsection

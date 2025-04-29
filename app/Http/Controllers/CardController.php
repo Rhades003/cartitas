@@ -5,14 +5,20 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CardController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Card::where('title', 'LIKE', '%' . $request->name . '%')
-        ->orWhere('pasive', 'LIKE', '%' . $request->name . '%');
-
+        //return $request->searchOnlyhForName;
+        if($request->searchOnlyhForName == "true"){
+        $query = Card::where('title', 'LIKE', '%' . $request->name . '%');    
+    }
+        else {
+            $query = Card::where('title', 'LIKE', '%' . $request->name . '%')
+            ->orWhere('pasive', 'LIKE', '%' . $request->name . '%');
+        }
         $cards = $query->paginate(300);
         return response()->json($cards);
     }
@@ -20,6 +26,15 @@ class CardController extends Controller
     public function show($id)
     {
         $card = Card::with('offers')->findOrFail($id);
-        return response()->json($card);
-    }
+        $user = Auth::user();
+
+            $data = [
+                "card"=> $card,
+                "admin"=>$user->admin,
+            ];
+
+            return response()->json($data);
+        }
+
+
 }

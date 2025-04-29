@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/cards', function () {
     return view('index');
 });
 Route::get('/login', function () {
@@ -27,6 +27,9 @@ Route::get('/welcome', function () {
 });
 Route::get('/decks', function () {
     return view('decks');
+});
+Route::get('/cards/{id}', function () {
+    return view('card');
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/decks', function () {

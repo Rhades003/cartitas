@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 Route::get('/login', function () {
     return view('login');
-});
+})->name("login");
 Route::get('/register', function () {
     return view('register');
 });
@@ -28,3 +28,11 @@ Route::get('/welcome', function () {
 Route::get('/decks', function () {
     return view('decks');
 });
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/decks', function () {
+        return view('decks');
+    });
+    Route::get('/decks/{id}', function ($id) {
+        return view('deck', ['id' => $id]);
+    })->name('decks.show');
+    });

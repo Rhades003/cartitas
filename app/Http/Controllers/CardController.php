@@ -10,21 +10,10 @@ class CardController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Card::query();
+        $query = Card::where('title', 'LIKE', '%' . $request->name . '%')
+        ->orWhere('pasive', 'LIKE', '%' . $request->name . '%');
 
-        if ($request->has('title')) {
-            $query->where('title', 'like', '%'.$request->title.'%');
-        }
-
-        if ($request->has('type')) {
-            $query->where('type', $request->type);
-        }
-
-        if ($request->has('pasive')) {
-            $query->where('pasive', 'like', '%'.$request->pasive.'%');
-        }
-
-        $cards = $query->paginate(150);
+        $cards = $query->paginate(300);
         return response()->json($cards);
     }
 

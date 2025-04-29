@@ -91,4 +91,22 @@ class DeckController extends Controller
         $deck->delete();
         return response()->json(null, 204);
     }
+
+    public function addCard(Request $request, $deckId)
+{
+    $request->validate([
+        'card_id' => 'required|integer|exists:cards,id'
+    ]);
+
+    $deck = Deck::where('id', $deckId)
+              ->where('user_id', Auth::id())
+              ->firstOrFail();
+
+    $deck->cards()->syncWithoutDetaching([$request->card_id]);
+
+    return response()->json([
+        'message' => 'Carta añadida al mazo',
+        'card' => $deck->cards()->find($request->card_id)
+    ], 201);
+}
 }

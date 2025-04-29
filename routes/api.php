@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('decks', [App\Http\Controllers\DeckController::class, "get"]);
     Route::post('decks', [App\Http\Controllers\DeckController::class, "create"]);
+    Route::post('decks/{id}/cards', [App\Http\Controllers\DeckController::class, "addCard"]);
+    Route::delete('decks/{id}/cards', [App\Http\Controllers\DeckController::class, "addCard"]);
     Route::get('decks/{id}', [App\Http\Controllers\DeckController::class, "getById"]);
     Route::put('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);
     Route::delete('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);

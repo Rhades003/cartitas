@@ -35,7 +35,20 @@
                 });
         }
 
+        function deleteOffer(offerId) {
+            let token = localStorage.getItem('token');
 
+            axios.delete("/api/cards/offer/" + offerId, {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                   //displaySearchResults(response.data);
+                    window.location.reload();
+                });
+            }
 
         function displaySearchResults(card) {
             console.log(card);
@@ -98,6 +111,7 @@
                         </div>
                     </div>`;
             }
+            if(!card.admin){
             offerDiv.innerHTML = `
                 <div class="card mt-4">
             <div class="card-header bg-dark text-white">
@@ -132,6 +146,48 @@
                 </div>
             </div>
         </div>`;
+            }
+            else if(card.admin){
+                offerDiv.innerHTML = `
+                <div class="card mt-4">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Ofertas Disponibles (${card.card.offers.length})</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Vendedor</th>
+                                <th>Expansión</th>
+                                <th>Calidad</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>BCN</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${card.card.offers.map(offer => `
+                                <tr>
+                                    <td>${offer.seller || 'N/A'}</td>
+                                    <td>${offer.expansion || 'N/A'}</td>
+                                    <td>${offer.quality || 'N/A'}</td>
+                                    <td>${offer.price ? offer.price.toFixed(2) + ' €' : 'N/A'}</td>
+                                    <td>${offer.quantity || 'N/A'}</td>
+                                    <td>${offer.BCN ? 'Sí' : 'No'}</td>
+                                    <td><button onClick="deleteOffer(${offer.id})">Delete</button</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>`;
+            }
         }
+
+              
+    
     </script>
 @endsection

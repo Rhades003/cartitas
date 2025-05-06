@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Card;
+use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,5 +42,13 @@ class CardController extends Controller
             return response()->json($data);
         }
 
+    public function deleteOffer($id) {
+        if (Auth::check()) {
+            if(Auth::user()->admin){
+                $offer = Offer::find($id)->delete();
+                return $offer;
+            }
+        }
+        }
 
 }

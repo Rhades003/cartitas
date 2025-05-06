@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('decks/{id}', [App\Http\Controllers\DeckController::class, "getById"]);
     Route::put('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);
     Route::delete('decks/{id}', [App\Http\Controllers\DeckController::class, "delete"]);
+    Route::delete('cards/offer/{id}', [App\Http\Controllers\CardController::class, "deleteOffer"]);
     
 });
 
